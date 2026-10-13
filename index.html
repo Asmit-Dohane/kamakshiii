@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>For Kamakshi</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Pinyon+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="confetti"></canvas>
+
+<!-- ============ HERO ============ -->
+<header class="relative min-h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden" style="min-height:100svh">
+  <span class="twinkle absolute top-[12%] left-[15%]" style="color:var(--gold)">✦</span>
+  <span class="twinkle absolute top-[22%] right-[18%]" style="color:var(--rose);animation-delay:.8s">✦</span>
+  <span class="twinkle absolute bottom-[25%] left-[22%]" style="color:var(--rose);animation-delay:1.4s">✧</span>
+  <p class="italic" style="color:var(--gold)">Something I've been wanting to say, just for you…</p>
+  <h1 class="script text-7xl sm:text-9xl my-4">Kamakshi</h1>
+  <p class="max-w-md">Scroll slowly. Every part of this page is about us.</p>
+  <a href="#story" class="mt-10 text-3xl animate-bounce" style="color:var(--gold)" aria-label="Scroll down">♡</a>
+</header>
+
+<!-- ============ OUR STORY (edit the 3 items below) ============ -->
+<section id="story" class="relative z-10 max-w-3xl mx-auto px-6 py-20">
+  <h2 class="script text-5xl text-center mb-12">Our Story</h2>
+  <div class="space-y-10">
+    <article class="card p-5 reveal">
+      <div class="ph"><img src="photo.jpeg" alt="Photo"></div>
+      <h3 class="text-2xl font-semibold mt-4" style="color:var(--burgundy)">When I first noticed you</h3>
+      <p>EDIT ME: Write about the first time you saw her smile, and how everything quietly changed.</p>
+    </article>
+    <article class="card p-5 reveal">
+      <div class="ph"><img src="photo.jpeg" alt="Photo"></div>
+      <h3 class="text-2xl font-semibold mt-4" style="color:var(--burgundy)">When you became my favourite person</h3>
+      <p>EDIT ME: A small memory, a small talk, a laugh that you still replay in your head.</p>
+    </article>
+    <article class="card p-5 reveal">
+      <div class="ph"><img src="photo.jpeg" alt="Photo"></div>
+      <h3 class="text-2xl font-semibold mt-4" style="color:var(--burgundy)">30/09/2026</h3>
+      <p>EDIT ME: The day that made my heart certain. This is where I knew it was you.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ============ REASONS (tap a heart to flip) ============ -->
+<section class="relative z-10 max-w-3xl mx-auto px-6 py-20">
+  <h2 class="script text-5xl text-center mb-2">Why I Love You</h2>
+  <p class="text-center mb-10 italic">Tap a heart.</p>
+  <div id="reasons" class="grid grid-cols-2 sm:grid-cols-3 gap-4 reveal"></div>
+</section>
+
+<!-- ============ THE QUESTION ============ -->
+<section id="ask" class="relative z-10 text-center px-6 py-24" style="min-height:90svh">
+  <h2 class="script text-5xl sm:text-7xl">Kamakshi…</h2>
+  <p class="text-2xl my-6 max-w-lg mx-auto">I love you. Will you be mine forever?</p>
+  <p id="hint" class="italic h-6" style="color:var(--gold)"></p>
+  <div class="flex flex-col items-center justify-center gap-6 mt-8 sm:flex-row">
+    <button id="yes">Yes! ♥</button>
+    <button id="no">No</button>
+  </div>
+</section>
+
+<!-- ============ CELEBRATION MODAL ============ -->
+<div id="modal" role="dialog" aria-modal="true">
+  <div class="card p-8 text-center max-w-md" style="max-height:90svh;overflow:auto">
+    <div class="text-5xl">💖</div>
+    <h2 class="script text-5xl my-3">She said yes!</h2>
+    <!-- EDIT ME: your final message -->
+    <p>Kamakshi, you just made me the happiest person alive. Thank you for choosing me. I promise to choose you every single day, starting from 30/09/2026 and for all the days after.</p>
+    <p class="script text-3xl mt-4">Forever yours ♡</p>
+    <!-- AUDIO: put your song file path in src (e.g. "our-song.mp3") -->
+    <audio id="song" src="" loop></audio>
+    <button onclick="document.getElementById('modal').classList.remove('on')" class="mt-6 underline" style="color:var(--gold)">Close</button>
+  </div>
+</div>
+
+<script>
+/* ===== EDIT YOUR REASONS HERE ===== */
+const reasons=["The way you laugh makes my whole day better.","You are kind to everyone, even when no one is watching.","You make ordinary moments feel special.","Your smile is my favourite place.","I can be completely myself with you.","With you, the future looks beautiful."];
+const wrap=document.getElementById('reasons');
+reasons.forEach(r=>{
+  wrap.insertAdjacentHTML('beforeend',`<div class="flip" tabindex="0" role="button"><div><span class="face front">💗</span><span class="face back">${r}</span></div></div>`);
+});
+wrap.querySelectorAll('.flip').forEach(c=>{
+  const t=()=>c.classList.toggle('open');
+  c.addEventListener('click',t);
+  c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();t()}});
+});
+
+/* Fade-in on scroll */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target)}}),{threshold:.15});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* Floating hearts */
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(!reduce)setInterval(()=>{
+  const h=document.createElement('span');
+  h.className='float';h.textContent=['♡','♥','✦'][Math.floor(Math.random()*3)];
+  h.style.left=Math.random()*100+'vw';
+  h.style.fontSize=(14+Math.random()*22)+'px';
+  h.style.color=Math.random()>.5?'var(--rose)':'var(--gold)';
+  h.style.opacity=.55;
+  h.style.animationDuration=(7+Math.random()*6)+'s';
+  document.body.appendChild(h);setTimeout(()=>h.remove(),13000);
+},900);
+
+/* ===== The dodging NO button ===== */
+const no=document.getElementById('no'),yes=document.getElementById('yes'),hint=document.getElementById('hint');
+const lines=["Nice try 😉","Are you sure? 🥺","The button is shy!","Try the other one 💕","It's not going to happen 😌","Just say yes, Kamakshi ♥"];
+let tries=0,scale=1;
+function dodge(e){
+  if(e)e.preventDefault();
+  tries++;
+  no.style.position='fixed';
+  const w=no.offsetWidth,h=no.offsetHeight;
+  no.style.left=Math.random()*(innerWidth-w-24)+12+'px';
+  no.style.top=Math.random()*(innerHeight-h-24)+12+'px';
+  hint.textContent=lines[tries%lines.length];
+  scale=Math.min(scale+.12,2.2);
+  yes.style.transform=`scale(${scale})`;
+}
+['mouseenter','touchstart','click','focus'].forEach(ev=>no.addEventListener(ev,dodge,{passive:false}));
+
+/* ===== YES: confetti + modal + music ===== */
+const cv=document.getElementById('confetti'),cx=cv.getContext('2d');
+let bits=[];
+function size(){cv.width=innerWidth;cv.height=innerHeight}
+size();addEventListener('resize',size);
+function burst(){
+  const cols=['#b76e79','#f7d6d9','#6b1f2e','#e8b4a0','#fff'];
+  for(let i=0;i<180;i++)bits.push({x:innerWidth/2,y:innerHeight/2,vx:(Math.random()-.5)*16,vy:Math.random()*-16-3,s:5+Math.random()*7,c:cols[i%5],r:Math.random()*6});
+  (function tick(){
+    cx.clearRect(0,0,cv.width,cv.height);
+    bits.forEach(b=>{b.x+=b.vx;b.y+=b.vy;b.vy+=.35;b.r+=.2;cx.save();cx.translate(b.x,b.y);cx.rotate(b.r);cx.fillStyle=b.c;cx.fillRect(-b.s/2,-b.s/2,b.s,b.s*.6);cx.restore()});
+    bits=bits.filter(b=>b.y<cv.height+20);
+    if(bits.length)requestAnimationFrame(tick);else cx.clearRect(0,0,cv.width,cv.height);
+  })();
+}
+yes.addEventListener('click',()=>{
+  no.style.display='none';
+  document.getElementById('modal').classList.add('on');
+  burst();setTimeout(burst,700);
+  const a=document.getElementById('song');
+  if(a.getAttribute('src'))a.play().catch(()=>{});
+});
+</script>
+</body>
+</html>
